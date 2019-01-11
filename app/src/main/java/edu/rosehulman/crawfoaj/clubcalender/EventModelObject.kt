@@ -7,4 +7,4 @@ data class EventModelObject (
     var club:String ="",
     var time:String = "",
     var date:String = "",
-    var repeatsWeekly:Boolean = true)
+    var repeatsWeekly:Boolean = true) 
