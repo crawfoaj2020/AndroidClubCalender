@@ -5,6 +5,6 @@ data class EventModelObject (
     var description:String ="",
     var location:String = "",
     var club:String ="",
-    var time:String = "",
-    var date:String = "",
-    var repeatsWeekly:Boolean = true) 
+    var hour:Int = 0,
+    var min:Int = 0,
+    var repeatsWeekly:Boolean = true)

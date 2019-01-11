@@ -5,10 +5,12 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
+import android.app.TimePickerDialog
+import android.widget.TimePicker
 
 import kotlinx.android.synthetic.main.activity_event_summary.*
 
-class EventSummary : AppCompatActivity() {
+class EventSummary : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +20,14 @@ class EventSummary : AppCompatActivity() {
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+            val newFragment = TimePickerDialog(this, null, 3,0, false)
+            newFragment.show()
         }
+    }
+
+    //TODO move to create event and implement
+    override fun onTimeSet(view: TimePicker?, hour : Int, minute: Int) {
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
