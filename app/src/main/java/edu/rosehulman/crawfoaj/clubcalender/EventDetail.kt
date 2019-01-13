@@ -14,6 +14,7 @@ class EventDetail : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_detail)
         setSupportActionBar(toolbar)
+        event = intent.getParcelableExtra(EventModelObject.KEY)
         setValues()
     }
 

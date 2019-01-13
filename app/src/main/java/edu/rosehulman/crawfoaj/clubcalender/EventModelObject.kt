@@ -40,6 +40,7 @@ data class EventModelObject (
     }
 
     companion object CREATOR : Parcelable.Creator<EventModelObject> {
+        val KEY = "GetEvent"
         override fun createFromParcel(parcel: Parcel): EventModelObject {
             return EventModelObject(parcel)
         }
@@ -48,4 +49,5 @@ data class EventModelObject (
             return arrayOfNulls(size)
         }
     }
+
 }
