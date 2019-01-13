@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/event_detail_margin"
+>
+
+    <TextView
+            android:text="@string/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ConstantsName"
+            android:paddingBottom="@dimen/margin_between_title_and_content"
+            android:textSize="@dimen/default_font_size"
+            android:textStyle="bold"
+
+    />
+
+    <TextView
+            android:text="@string/blank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ValueName"
+            android:paddingBottom="@dimen/margin_between_items"
+            android:textSize="@dimen/default_font_size"
+            android:layout_below="@+id/ConstantsName"
+
+    />
+
+    <TextView
+            android:text="@string/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ConstantsDescription"
+            android:paddingBottom="@dimen/margin_between_title_and_content"
+            android:textSize="@dimen/default_font_size"
+            android:textStyle="bold"
+            android:layout_below="@id/ValueName"
+
+    />
+
+    <TextView
+            android:text="@string/blank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ValueDescription"
+            android:paddingBottom="@dimen/margin_between_items"
+            android:textSize="@dimen/default_font_size"
+            android:layout_below="@+id/ConstantsDescription"
+
+    />
+
+    <TextView
+            android:text="@string/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ConstantsLocation"
+            android:paddingBottom="@dimen/margin_between_title_and_content"
+            android:textSize="@dimen/default_font_size"
+            android:textStyle="bold"
+            android:layout_below="@id/ValueDescription"
+
+    />
+
+    <TextView
+            android:text="@string/blank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ValueLocation"
+            android:paddingBottom="@dimen/margin_between_items"
+            android:textSize="@dimen/default_font_size"
+            android:layout_below="@+id/ConstantsLocation"
+
+    />
+
+    <TextView
+            android:text="@string/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ConstantsTime"
+            android:paddingBottom="@dimen/margin_between_title_and_content"
+            android:textSize="@dimen/default_font_size"
+            android:textStyle="bold"
+            android:layout_below="@id/ValueLocation"
+
+    />
+
+    <TextView
+            android:text="@string/blank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ValueTime"
+            android:paddingBottom="@dimen/margin_between_items"
+            android:textSize="@dimen/default_font_size"
+            android:layout_below="@+id/ConstantsTime"
+
+    />
+
+    <TextView
+            android:text="@string/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ConstantsDate"
+            android:paddingBottom="@dimen/margin_between_title_and_content"
+            android:textSize="@dimen/default_font_size"
+            android:textStyle="bold"
+            android:layout_below="@id/ValueTime"
+
+    />
+
+    <TextView
+            android:text="@string/blank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ValueDate"
+            android:paddingBottom="@dimen/margin_between_items"
+            android:textSize="@dimen/default_font_size"
+            android:layout_below="@+id/ConstantsDate"
+
+    />
+
+    <TextView
+            android:text="@string/club"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ConstantsClub"
+            android:paddingBottom="@dimen/margin_between_title_and_content"
+            android:textSize="@dimen/default_font_size"
+            android:textStyle="bold"
+            android:layout_below="@id/ValueDate"
+
+    />
+
+    <TextView
+            android:text="@string/blank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ValueClub"
+            android:paddingBottom="@dimen/margin_between_items"
+            android:textSize="@dimen/default_font_size"
+            android:layout_below="@+id/ConstantsClub"
+
+    />
+
+
+</RelativeLayout>
