@@ -27,6 +27,8 @@ class EventSummary : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
             newFragment.show()
         }
         fakeButton.setOnClickListener{ view ->
+            val fakeEvent = EventModelObject("Test event", "Testing passing info",
+                "Myers", "Android", 37, 5, "1/1/1", false)
             val intent = Intent(this, EventDetail::class.java)
             startActivity(intent)
         }
