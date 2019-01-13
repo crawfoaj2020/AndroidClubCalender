@@ -6,9 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.widget.TimePicker
 
 import kotlinx.android.synthetic.main.activity_event_summary.*
+import kotlinx.android.synthetic.main.content_event_detail.*
+import kotlinx.android.synthetic.main.content_event_summary.*
 
 class EventSummary : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
 
@@ -22,6 +25,10 @@ class EventSummary : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
                 .setAction("Action", null).show()
             val newFragment = TimePickerDialog(this, null, 3,0, false)
             newFragment.show()
+        }
+        fakeButton.setOnClickListener{ view ->
+            val intent = Intent(this, EventDetail::class.java)
+            startActivity(intent)
         }
     }
 
