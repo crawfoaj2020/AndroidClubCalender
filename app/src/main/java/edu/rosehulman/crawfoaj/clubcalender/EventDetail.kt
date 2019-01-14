@@ -23,7 +23,7 @@ class EventDetail : AppCompatActivity() {
         ValueDescription.text = event.description
         ValueLocation.text = event.location
         ValueTime.text = "${event.hour}:${event.min} PM" //TODO figure out AM vs PM
-        ValueDate.text = event.date
+        ValueDate.text = "${event.month}/${event.date}/${event.year}"
         ValueClub.text = event.club
     }
 

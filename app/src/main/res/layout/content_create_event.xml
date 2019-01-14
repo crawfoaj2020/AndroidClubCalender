@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/event_detail_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:showIn="@layout/activity_create_event"
+        tools:context=".CreateEvent">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/name"
+            android:textSize="@dimen/default_font_size"
+            android:layout_marginBottom="@dimen/margin_between_title_and_content"
+            android:textStyle="bold"
+    />
+
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:id="@+id/name_field"
+    />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/description"
+            android:layout_marginTop="@dimen/margin_between_items"
+            android:textStyle="bold"
+            android:textSize="@dimen/default_font_size"
+            android:layout_marginBottom="@dimen/margin_between_title_and_content"
+    />
+
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:id="@+id/description_field"
+    />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/location"
+            android:layout_marginTop="@dimen/margin_between_items"
+            android:textSize="@dimen/default_font_size"
+            android:layout_marginBottom="@dimen/margin_between_title_and_content"
+            android:textStyle="bold"
+    />
+
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:id="@+id/location_field"
+    />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/time"
+            android:layout_marginTop="@dimen/margin_between_items"
+            android:textSize="@dimen/default_font_size"
+            android:layout_marginBottom="@dimen/margin_between_title_and_content"
+            android:textStyle="bold"
+    />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_unspecified"
+            android:text="@string/time_unspecified"
+            android:textSize="@dimen/default_font_size"
+            android:id="@+id/time_field"
+            android:onClick="showTimePickerDialog"
+    />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/date"
+            android:layout_marginTop="@dimen/margin_between_items"
+            android:textSize="@dimen/default_font_size"
+            android:layout_marginBottom="@dimen/margin_between_title_and_content"
+            android:textStyle="bold"
+    />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_unspecified"
+            android:text="@string/date_unspecified"
+            android:textSize="@dimen/default_font_size"
+            android:id="@+id/date_field"
+            android:onClick="showDatePickerDialog"
+    />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/repeats_weekly"
+            android:layout_marginTop="@dimen/margin_between_items"
+            android:textSize="@dimen/default_font_size"
+            android:layout_marginBottom="@dimen/margin_between_title_and_content"
+            android:textStyle="bold"
+    />
+
+    <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/repeat_field"
+    />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/club"
+            android:layout_marginTop="@dimen/margin_between_items"
+            android:textSize="@dimen/default_font_size"
+            android:layout_marginBottom="@dimen/margin_between_title_and_content"
+            android:textStyle="bold"
+    />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_unspecified"
+            android:text="@string/club_unspecified"
+            android:textSize="@dimen/default_font_size"
+            android:id="@+id/club_field"
+    />
+</LinearLayout>

@@ -1,5 +1,6 @@
 package edu.rosehulman.crawfoaj.clubcalender
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,10 @@ import kotlinx.android.synthetic.main.activity_event_summary.*
 import kotlinx.android.synthetic.main.content_event_detail.*
 import kotlinx.android.synthetic.main.content_event_summary.*
 
-class EventSummary : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
+class EventSummary : AppCompatActivity() {
+
+    var events = arrayListOf<EventModelObject>()
+    val CREATE_EVENT_REQUEST_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,23 +25,16 @@ class EventSummary : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-            val newFragment = TimePickerDialog(this, null, 3,0, false)
-            newFragment.show()
+            val intent = Intent(this,CreateEvent::class.java)
+            startActivityForResult(intent,CREATE_EVENT_REQUEST_CODE)
         }
         fakeButton.setOnClickListener{ view ->
             val fakeEvent = EventModelObject("Test event", "Testing passing info",
-                "Myers", "Android", 37, 5, "1/1/1", false)
+                "Myers", "Android", 37, 5, 2019,1,1, false)
             val intent = Intent(this, EventDetail::class.java)
             intent.putExtra(EventModelObject.KEY, fakeEvent)
             startActivity(intent)
         }
-    }
-
-    //TODO move to create event and implement
-    override fun onTimeSet(view: TimePicker?, hour : Int, minute: Int) {
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -53,6 +50,14 @@ class EventSummary : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == CREATE_EVENT_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            val newEvent = data!!.getParcelableExtra<EventModelObject>(CreateEvent.KEY_NEW_EVENT)
+            events.add(newEvent)
+            //TODO display events
         }
     }
 }

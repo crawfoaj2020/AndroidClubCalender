@@ -10,4 +10,10 @@
     <string name="club">Club</string>
     <string name="title_activity_event_detail">EventDetail</string>
     <string name="title_activity_test">test</string>
+    <string name="time_unspecified">Please select a time</string>
+    <string name="date_unspecified">Please select a date</string>
+    <string name="repeats_weekly">Repeats weekly</string>
+    <string name="club_unspecified">Please select a club</string>
+    <string name="title_activity_create_event">CreateEvent</string>
+    <string name="save">Save</string>
 </resources>

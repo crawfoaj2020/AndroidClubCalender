@@ -2,6 +2,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="event_detail_margin">20dp</dimen>
     <dimen name="default_font_size">20sp</dimen>
-    <dimen name="margin_between_title_and_content">5dp</dimen>
+    <dimen name="margin_between_title_and_content">3dp</dimen>
     <dimen name="margin_between_items">10dp</dimen>
 </resources>

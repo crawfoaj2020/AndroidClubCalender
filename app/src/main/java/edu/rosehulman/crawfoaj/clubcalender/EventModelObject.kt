@@ -10,7 +10,9 @@ data class EventModelObject (
     var club:String ="",
     var hour:Int = 0,
     var min:Int = 0,
-    var date:String = "",
+    var year:Int = 2019,
+    var month:Int = 1,
+    var date:Int = 1,
     var repeatsWeekly:Boolean = true): Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -20,7 +22,9 @@ data class EventModelObject (
         parcel.readString(),
         parcel.readInt(),
         parcel.readInt(),
-        parcel.readString(),
+        parcel.readInt(),
+        parcel.readInt(),
+        parcel.readInt(),
         parcel.readByte() != 0.toByte()
     )
 
@@ -31,7 +35,9 @@ data class EventModelObject (
         parcel.writeString(club)
         parcel.writeInt(hour)
         parcel.writeInt(min)
-        parcel.writeString(date)
+        parcel.writeInt(year)
+        parcel.writeInt(month)
+        parcel.writeInt(date)
         parcel.writeByte((if (repeatsWeekly) 1 else 0).toByte())
     }
 
