@@ -32,7 +32,7 @@ class EventSummary : AppCompatActivity() {
             val fakeEvent = EventModelObject("Test event", "Testing passing info",
                 "Myers", "Android", 37, 5, 2019,1,1, false)
             val intent = Intent(this, EventDetail::class.java)
-            intent.putExtra(EventModelObject.KEY, fakeEvent)
+            intent.putExtra(EventModelObject.KEY, events[0])
             startActivity(intent)
         }
     }

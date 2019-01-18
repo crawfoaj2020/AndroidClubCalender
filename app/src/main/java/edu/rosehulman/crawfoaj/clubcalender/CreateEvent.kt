@@ -1,5 +1,6 @@
 package edu.rosehulman.crawfoaj.clubcalender
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.content_create_event.*
 import java.util.*
 
 class CreateEvent : AppCompatActivity() {
+    val event = EventModelObject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,26 +29,39 @@ class CreateEvent : AppCompatActivity() {
     }
 
     fun showTimePickerDialog(v: View) {
-        MyTimePicker().show(supportFragmentManager, "timePicker")
+        val bundle = Bundle()
+        bundle.putParcelable(KEY_NEW_EVENT,event)
+        val timePicker = MyTimePicker()
+        timePicker.arguments = bundle
+        timePicker.show(supportFragmentManager, "timePicker")
     }
 
     fun showDatePickerDialog(v: View){
         MyDatePicker().show(supportFragmentManager,"datePicker")
     }
 
+    fun saveEvent(v:View){
+        val intent = Intent()
+        event.name = name_field.text.toString()
+        event.description = description_field.text.toString()
+        event.location = location_field.text.toString()
+        event.repeatsWeekly = repeat_field.isChecked
+        event.club = club_field.text.toString()
+        intent.putExtra(KEY_NEW_EVENT,event)
+        setResult(Activity.RESULT_OK,intent)
+        finish()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_save_event -> {
                 val intent = Intent(this,EventSummary::class.java)
-                val name = name_field.text.toString()
-                val descpt = description_field.text.toString()
-                val location = location_field.text.toString()
-                //TODO time and date
-                val repeat = repeat_field.isChecked
-                val club = club_field.text.toString()
-                intent.putExtra(KEY_NEW_EVENT,EventModelObject(
-                    name,descpt,location,club,0,0,2019,1,1,repeat
-                ))
+                event.name = name_field.text.toString()
+                event.description = description_field.text.toString()
+                event.location = location_field.text.toString()
+                event.repeatsWeekly = repeat_field.isChecked
+                event.club = club_field.text.toString()
+                intent.putExtra(KEY_NEW_EVENT,event)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -58,6 +73,8 @@ class CreateEvent : AppCompatActivity() {
 
         class MyTimePicker() : DialogFragment(),TimePickerDialog.OnTimeSetListener {
 
+            lateinit var event:EventModelObject
+
             /**
              * Called when the user is done setting a new time and the dialog has
              * closed.
@@ -68,13 +85,17 @@ class CreateEvent : AppCompatActivity() {
              */
             override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
                 activity!!.findViewById<TextView>(R.id.time_field).text = "$hourOfDay:$minute"
+                event.hour = hourOfDay
+                event.min = minute
             }
 
             override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+                if (savedInstanceState != null){
+                    event = savedInstanceState.getParcelable<EventModelObject>(KEY_NEW_EVENT)
+                }
                 val c = Calendar.getInstance()
                 val hour = c.get(Calendar.HOUR_OF_DAY)
                 val minute = c.get(Calendar.MINUTE)
-
                 return TimePickerDialog(activity,this,hour,minute,false)
             }
         }
