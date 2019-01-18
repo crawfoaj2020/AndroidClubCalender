@@ -8,7 +8,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.DatePicker
@@ -37,7 +36,11 @@ class CreateEvent : AppCompatActivity() {
     }
 
     fun showDatePickerDialog(v: View){
-        MyDatePicker().show(supportFragmentManager,"datePicker")
+        val bundle = Bundle()
+        bundle.putParcelable(KEY_NEW_EVENT,event)
+        val datePicker = MyDatePicker()
+        datePicker.arguments = bundle
+        datePicker.show(supportFragmentManager,"datePicker")
     }
 
     fun saveEvent(v:View){
@@ -90,8 +93,8 @@ class CreateEvent : AppCompatActivity() {
             }
 
             override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-                if (savedInstanceState != null){
-                    event = savedInstanceState.getParcelable<EventModelObject>(KEY_NEW_EVENT)
+                if (arguments != null){
+                    event = arguments!!.getParcelable<EventModelObject>(KEY_NEW_EVENT)
                 }
                 val c = Calendar.getInstance()
                 val hour = c.get(Calendar.HOUR_OF_DAY)
@@ -101,6 +104,7 @@ class CreateEvent : AppCompatActivity() {
         }
 
         class MyDatePicker():DialogFragment(),DatePickerDialog.OnDateSetListener{
+            lateinit var event:EventModelObject
             /**
              * @param view the picker associated with the dialog
              * @param year the selected year
@@ -111,9 +115,15 @@ class CreateEvent : AppCompatActivity() {
              */
             override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
                 activity!!.findViewById<TextView>(R.id.date_field).text = "${month+1}/$dayOfMonth/$year"
+                event.day = dayOfMonth
+                event.month = month +1
+                event.year = year
             }
 
             override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+                if (arguments != null){
+                    event = arguments!!.getParcelable<EventModelObject>(KEY_NEW_EVENT)
+                }
                 val c = Calendar.getInstance()
                 val year = c.get(Calendar.YEAR)
                 val month = c.get(Calendar.MONTH)

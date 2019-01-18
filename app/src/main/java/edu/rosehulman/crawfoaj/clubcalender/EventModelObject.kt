@@ -12,7 +12,7 @@ data class EventModelObject (
     var min:Int = 0,
     var year:Int = 2019,
     var month:Int = 1,
-    var date:Int = 1,
+    var day:Int = 1,
     var repeatsWeekly:Boolean = true): Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -37,7 +37,7 @@ data class EventModelObject (
         parcel.writeInt(min)
         parcel.writeInt(year)
         parcel.writeInt(month)
-        parcel.writeInt(date)
+        parcel.writeInt(day)
         parcel.writeByte((if (repeatsWeekly) 1 else 0).toByte())
     }
 

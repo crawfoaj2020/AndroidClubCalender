@@ -1,7 +1,6 @@
 package edu.rosehulman.crawfoaj.clubcalender
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity;
 
 import kotlinx.android.synthetic.main.activity_event_detail.*
@@ -23,7 +22,7 @@ class EventDetail : AppCompatActivity() {
         ValueDescription.text = event.description
         ValueLocation.text = event.location
         ValueTime.text = "${event.hour}:${event.min} PM" //TODO figure out AM vs PM
-        ValueDate.text = "${event.month}/${event.date}/${event.year}"
+        ValueDate.text = "${event.month}/${event.day}/${event.year}"
         ValueClub.text = event.club
     }
 
