@@ -8,33 +8,43 @@ import android.view.Menu
 import android.view.MenuItem
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.RectF
 import android.widget.TimePicker
+import com.alamkanak.weekview.MonthLoader
+import com.alamkanak.weekview.WeekView
+import com.alamkanak.weekview.WeekViewEvent
 
 import kotlinx.android.synthetic.main.activity_event_summary.*
 import kotlinx.android.synthetic.main.content_event_detail.*
 import kotlinx.android.synthetic.main.content_event_summary.*
+import java.util.*
 
 class EventSummary : AppCompatActivity() {
 
     var events = arrayListOf<EventModelObject>()
     val CREATE_EVENT_REQUEST_CODE = 1
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_summary)
         setSupportActionBar(toolbar)
 
+
+        val listener = weekViewListeners()
+        var mWeekView = findViewById<WeekView>(R.id.weekView)
+        mWeekView.setOnEventClickListener(listener)
+        mWeekView.monthChangeListener = listener
+        mWeekView.eventLongPressListener = listener
+
+
+
         fab.setOnClickListener { view ->
             val intent = Intent(this,CreateEvent::class.java)
             startActivityForResult(intent,CREATE_EVENT_REQUEST_CODE)
         }
-        fakeButton.setOnClickListener{ view ->
-            val fakeEvent = EventModelObject("Test event", "Testing passing info",
-                "Myers", "Android", 37, 5, 2019,1,1, false)
-            val intent = Intent(this, EventDetail::class.java)
-            intent.putExtra(EventModelObject.KEY, events[0])
-            startActivity(intent)
-        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -57,7 +67,55 @@ class EventSummary : AppCompatActivity() {
         if (requestCode == CREATE_EVENT_REQUEST_CODE && resultCode == Activity.RESULT_OK){
             val newEvent = data!!.getParcelableExtra<EventModelObject>(CreateEvent.KEY_NEW_EVENT)
             events.add(newEvent)
-            //TODO display events
+            //TODO fix ids
+            newEvent.id = (events.size-1).toLong()
+            var mWeekView = findViewById<WeekView>(R.id.weekView)
+            mWeekView.notifyDatasetChanged()
+
         }
     }
+
+    inner class weekViewListeners():WeekView.EventClickListener,
+        MonthLoader.MonthChangeListener,  WeekView.EventLongPressListener{
+        override fun onEventLongPress(event: WeekViewEvent?, eventRect: RectF?) {
+            //No reaction
+        }
+
+        override fun onMonthChange(newYear: Int, newMonth: Int): MutableList<out WeekViewEvent> {
+            var weekEvents = arrayListOf<WeekViewEvent>()
+            for(e in events){
+                if(e.month == newMonth && e.year == newYear){
+                    weekEvents.add(e.toWeekEvent())
+                }
+            }
+
+//            val startTime = Calendar.getInstance()
+//            startTime.set(Calendar.HOUR_OF_DAY, 3)
+//            startTime.set(Calendar.MINUTE, 0)
+//            startTime.set(Calendar.MONTH, newMonth - 1)
+//            startTime.set(Calendar.YEAR, newYear)
+//            val endTime = startTime.clone() as Calendar
+//            endTime.add(Calendar.HOUR, 1)
+//            endTime.set(Calendar.MONTH, newMonth - 1)
+//            val event = WeekViewEvent(1, "Just show Somerthing", startTime, endTime)
+//            event.color = Color.parseColor("#000000")
+//            weekEvents.add(event)
+            return weekEvents
+
+        }
+
+        override fun onEventClick(event: WeekViewEvent?, eventRect: RectF?) {
+            val intent = Intent(this@EventSummary, EventDetail::class.java)
+            if(event == null){
+                return
+            }
+            var id = event.id.toInt()
+            intent.putExtra(EventModelObject.KEY, events[id])
+            startActivity(intent)
+
+        }
+
+    }
 }
+
+
