@@ -5,7 +5,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.alamkanak.weekview.WeekViewEvent
 import java.text.SimpleDateFormat
-import com.google.firebase.firestore.DocumentSnapshotimport java.util.*
+import com.google.firebase.firestore.DocumentSnapshot
+import java.util.*
 
 data class EventModelObject (
     var name:String = "",
