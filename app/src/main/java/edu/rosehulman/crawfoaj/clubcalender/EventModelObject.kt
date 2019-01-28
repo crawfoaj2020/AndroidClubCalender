@@ -48,7 +48,7 @@ data class EventModelObject (
         val endTime = startTime.clone() as Calendar
         endTime.add(Calendar.HOUR, 1)
         endTime.set(Calendar.MONTH, month - 1)
-        println("AAAAAAAAAAAA made a week event $startTime")
+//        println("AAAAAAAAAAAA made a week event $startTime")
         var weekEvent = WeekViewEvent(key, name, location, startTime, endTime)
         weekEvent.color = Color.parseColor("#AAAAAA")
         return weekEvent
