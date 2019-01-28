@@ -4,8 +4,8 @@ import android.graphics.Color
 import android.os.Parcel
 import android.os.Parcelable
 import com.alamkanak.weekview.WeekViewEvent
-import com.google.firebase.firestore.DocumentSnapshot
-import java.util.*
+import java.text.SimpleDateFormat
+import com.google.firebase.firestore.DocumentSnapshotimport java.util.*
 
 data class EventModelObject (
     var name:String = "",
@@ -68,6 +68,13 @@ data class EventModelObject (
 
     override fun describeContents(): Int {
         return 0
+    }
+
+    fun getTimeFormatted():String{
+        val format = SimpleDateFormat("hh:mm a")
+        val time = Calendar.getInstance()
+        time.set(year,month,day,hour,min)
+        return format.format(time.time)
     }
 
     companion object CREATOR : Parcelable.Creator<EventModelObject> {

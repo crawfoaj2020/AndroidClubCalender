@@ -21,7 +21,7 @@ class EventDetail : AppCompatActivity() {
         ValueName.text = event.name
         ValueDescription.text = event.description
         ValueLocation.text = event.location
-        ValueTime.text = "${event.hour}:${event.min} PM" //TODO figure out AM vs PM
+        ValueTime.text = event.getTimeFormatted() //TODO figure out AM vs PM
         ValueDate.text = "${event.month}/${event.day}/${event.year}"
         ValueClub.text = event.club
     }
