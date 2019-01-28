@@ -14,6 +14,10 @@ import android.widget.TimePicker
 import com.alamkanak.weekview.MonthLoader
 import com.alamkanak.weekview.WeekView
 import com.alamkanak.weekview.WeekViewEvent
+import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 
 import kotlinx.android.synthetic.main.activity_event_summary.*
 import kotlinx.android.synthetic.main.content_event_detail.*
@@ -23,6 +27,8 @@ import java.util.*
 class EventSummary : AppCompatActivity() {
 
     var events = arrayListOf<EventModelObject>()
+    private val allEventsRef = FirebaseFirestore
+        .getInstance().collection(Constants.EVENTS_COLLECTION)
     val CREATE_EVENT_REQUEST_CODE = 1
 
 
@@ -38,7 +44,7 @@ class EventSummary : AppCompatActivity() {
         mWeekView.monthChangeListener = listener
         mWeekView.eventLongPressListener = listener
 
-
+        addSnapshotListener()
 
         fab.setOnClickListener { view ->
             val intent = Intent(this,CreateEvent::class.java)
@@ -46,6 +52,7 @@ class EventSummary : AppCompatActivity() {
         }
 
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -63,12 +70,53 @@ class EventSummary : AppCompatActivity() {
         }
     }
 
+    private fun addSnapshotListener() {
+        allEventsRef
+            .addSnapshotListener { snapshot, firebaseException ->
+                if (firebaseException != null) {
+                    return@addSnapshotListener
+                }
+                processSnapshotDiffs(snapshot!!)
+            }
+    }
+
+    private fun processSnapshotDiffs(snapshot: QuerySnapshot) {
+        var mWeekView = findViewById<WeekView>(R.id.weekView)
+        for (documentChange in snapshot.documentChanges) {
+            val curEvent = EventModelObject.fromSnapshot(documentChange.document)
+            when (documentChange.type) {
+                DocumentChange.Type.ADDED -> {
+                    events.add(curEvent)
+                    mWeekView.notifyDatasetChanged()
+                }
+                DocumentChange.Type.REMOVED -> {
+
+                    val index = events.indexOfFirst { curEvent.id == it.id }
+                    events.removeAt(index)
+                    mWeekView.notifyDatasetChanged()
+
+                }
+                DocumentChange.Type.MODIFIED -> {
+                    for ((index, mq) in events.withIndex()) {
+                        if (mq.id == curEvent.id) {
+                            events[index] = curEvent
+                            mWeekView.notifyDatasetChanged()
+                            break
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == CREATE_EVENT_REQUEST_CODE && resultCode == Activity.RESULT_OK){
             val newEvent = data!!.getParcelableExtra<EventModelObject>(CreateEvent.KEY_NEW_EVENT)
+//            events.add(newEvent)
+//            //TODO fix ids
+            allEventsRef.add(newEvent)
             events.add(newEvent)
-            //TODO fix ids
-            newEvent.id = (events.size-1).toLong()
+//            newEvent.id = (events.size-1).toLong()
             var mWeekView = findViewById<WeekView>(R.id.weekView)
             mWeekView.notifyDatasetChanged()
 
@@ -78,16 +126,26 @@ class EventSummary : AppCompatActivity() {
     inner class weekViewListeners():WeekView.EventClickListener,
         MonthLoader.MonthChangeListener,  WeekView.EventLongPressListener{
         override fun onEventLongPress(event: WeekViewEvent?, eventRect: RectF?) {
-            //No reaction
+            //No reaction yet, eventually delete
         }
 
         override fun onMonthChange(newYear: Int, newMonth: Int): MutableList<out WeekViewEvent> {
             var weekEvents = arrayListOf<WeekViewEvent>()
-            for(e in events){
-                if(e.month == newMonth && e.year == newYear){
-                    weekEvents.add(e.toWeekEvent())
+            allEventsRef.whereEqualTo("month", newMonth)
+                .get().addOnSuccessListener{document: QuerySnapshot ->
+                    var returnVal = document.toObjects(EventModelObject::class.java)
+                    for(nextEvent in returnVal){
+                        println("AAAAAAAAAA found event")
+                        weekEvents.add(nextEvent.toWeekEvent())
                 }
+//
             }
+
+//            for(e in events){
+//                if(e.month == newMonth && e.year == newYear){
+//                    weekEvents.add(e.toWeekEvent())
+//                }
+//            }
 
 //            val startTime = Calendar.getInstance()
 //            startTime.set(Calendar.HOUR_OF_DAY, 3)
@@ -104,13 +162,18 @@ class EventSummary : AppCompatActivity() {
 
         }
 
-        override fun onEventClick(event: WeekViewEvent?, eventRect: RectF?) {
+        override fun onEventClick(weekEvent: WeekViewEvent?, eventRect: RectF?) {
             val intent = Intent(this@EventSummary, EventDetail::class.java)
-            if(event == null){
+            if(weekEvent == null){
                 return
             }
-            var id = event.id.toInt()
-            intent.putExtra(EventModelObject.KEY, events[id])
+            var id = weekEvent.id
+            for(event in events){
+                if(event.key == id){
+                    intent.putExtra(EventModelObject.KEY, event)
+                    break
+                }
+            }
             startActivity(intent)
 
         }

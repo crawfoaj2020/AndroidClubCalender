@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "201375455256",
+    "firebase_url": "https://club-calender-6562b.firebaseio.com",
+    "project_id": "club-calender-6562b",
+    "storage_bucket": "club-calender-6562b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:201375455256:android:23a5198a692ae467",
+        "android_client_info": {
+          "package_name": "edu.rosehulman.crawfoaj.clubcalender"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "201375455256-n7b20cu2ek9tqecbm79m5ahq1gpnteoq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.rosehulman.crawfoaj.clubcalender",
+            "certificate_hash": "b4ba344bf300bc9fe9a26f7ed03e4ba2e1947281"
+          }
+        },
+        {
+          "client_id": "201375455256-fiefuu13m0020l359mrnv4j338dieuoj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASGAB4MQs0JUDtX33dWjQNP3kZtqV9IJk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "201375455256-fiefuu13m0020l359mrnv4j338dieuoj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

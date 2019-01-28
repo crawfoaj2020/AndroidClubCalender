@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Parcel
 import android.os.Parcelable
 import com.alamkanak.weekview.WeekViewEvent
+import com.google.firebase.firestore.DocumentSnapshot
 import java.util.*
 
 data class EventModelObject (
@@ -16,9 +17,11 @@ data class EventModelObject (
     var year:Int = 2019,
     var month:Int = 1,
     var day:Int = 1,
-    var repeatsWeekly:Boolean = true): Parcelable {
+    var repeatsWeekly:Boolean = true,
+    var key:Long = EventModelObject.getUnusedId()): Parcelable {
 
-    var id:Long = -1
+    var id = ""
+
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -45,7 +48,7 @@ data class EventModelObject (
         endTime.add(Calendar.HOUR, 1)
         endTime.set(Calendar.MONTH, month - 1)
         println("AAAAAAAAAAAA made a week event $startTime")
-        var weekEvent = WeekViewEvent(id, name, location, startTime, endTime)
+        var weekEvent = WeekViewEvent(key, name, location, startTime, endTime)
         weekEvent.color = Color.parseColor("#AAAAAA")
         return weekEvent
     }
@@ -69,8 +72,35 @@ data class EventModelObject (
 
     companion object CREATOR : Parcelable.Creator<EventModelObject> {
         val KEY = "GetEvent"
+        var avalibleKeys: MutableList<Long>? = null
+        private fun setupKeys(){
+            avalibleKeys = mutableListOf()
+
+            for(i in 0..1000){
+                avalibleKeys!!.add(i.toLong())
+            }
+        }
+
+        fun getUnusedId():Long{
+            if(avalibleKeys == null){
+                setupKeys()
+            }
+            return avalibleKeys!!.removeAt(0)
+        }
+
+        //Cal when delete an event
+        fun makeIdAvalible(id:Long){
+            avalibleKeys!!.add(id)
+        }
+
         override fun createFromParcel(parcel: Parcel): EventModelObject {
             return EventModelObject(parcel)
+        }
+
+        fun fromSnapshot(snapshot: DocumentSnapshot): EventModelObject{
+            val event = snapshot.toObject(EventModelObject::class.java)!!
+            event.id = snapshot.id
+            return event
         }
 
         override fun newArray(size: Int): Array<EventModelObject?> {
