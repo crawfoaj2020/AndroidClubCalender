@@ -87,9 +87,9 @@ class CreateEvent : AppCompatActivity() {
              * @param minute the minute that was set
              */
             override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-                activity!!.findViewById<TextView>(R.id.time_field).text = "$hourOfDay:$minute"
                 event.hour = hourOfDay
                 event.min = minute
+                activity!!.findViewById<TextView>(R.id.time_field).text = event.getTimeFormatted()
             }
 
             override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
