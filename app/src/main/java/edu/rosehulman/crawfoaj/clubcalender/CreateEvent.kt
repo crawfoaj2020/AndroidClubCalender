@@ -116,7 +116,7 @@ class CreateEvent : AppCompatActivity() {
             override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
                 activity!!.findViewById<TextView>(R.id.date_field).text = "${month+1}/$dayOfMonth/$year"
                 event.day = dayOfMonth
-                event.month = month +1
+                event.month = month
                 event.year = year
             }
 

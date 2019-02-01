@@ -41,10 +41,10 @@ class EventSummary : AppCompatActivity() {
 
 
         val listener = weekViewListeners()
-        mWeekView = findViewById<WeekView>(R.id.weekView)
+        mWeekView = findViewById(R.id.weekView)
 
         addSnapshotListener()
-        println("AAAAAAAAAAAAApast snapshot listener")
+//        println("AAAAAAAAAAAAApast snapshot listener")
 
         mWeekView.setOnEventClickListener(listener)
         mWeekView.monthChangeListener = listener
@@ -82,7 +82,7 @@ class EventSummary : AppCompatActivity() {
                 if (firebaseException != null) {
                     return@addSnapshotListener
                 }
-                println("AAAAAAAAAAA snapshot listener triggered")
+//                println("AAAAAAAAAAA snapshot listener triggered")
                 processSnapshotDiffs(snapshot!!)
             }
     }
@@ -92,7 +92,8 @@ class EventSummary : AppCompatActivity() {
             val curEvent = EventModelObject.fromSnapshot(documentChange.document)
             when (documentChange.type) {
                 DocumentChange.Type.ADDED -> {
-                    println("AAAAAAAA adding an event ${curEvent.name}")
+//                    println("AAAAAAAA adding an event ${curEvent.name}")
+//                    print("AAAAAAAAAA print 3 (once per event)")
                     events.add(curEvent)
                     mWeekView.notifyDatasetChanged()
                 }
@@ -114,17 +115,14 @@ class EventSummary : AppCompatActivity() {
                 }
             }
         }
+//        println("AAAAAAA $events")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == CREATE_EVENT_REQUEST_CODE && resultCode == Activity.RESULT_OK){
             val newEvent = data!!.getParcelableExtra<EventModelObject>(CreateEvent.KEY_NEW_EVENT)
-//            events.add(newEvent)
-//            //TODO fix ids
             allEventsRef.add(newEvent)
-//            events.add(newEvent)
-//            newEvent.id = (events.size-1).toLong()
-//            mWeekView.notifyDatasetChanged()
+
 
         }
     }
@@ -136,35 +134,15 @@ class EventSummary : AppCompatActivity() {
         }
 
         override fun onMonthChange(newYear: Int, newMonth: Int): MutableList<out WeekViewEvent> {
-            println("AAAAAAAAAAAAA in on month change $newMonth")
+//            println("AAAAAAAAAAAA print 4 month: $newMonth")
             var weekEvents = arrayListOf<WeekViewEvent>()
-            allEventsRef.whereEqualTo("month", newMonth)
-                .get().addOnSuccessListener{document: QuerySnapshot ->
-                    var returnVal = document.toObjects(EventModelObject::class.java)
-                    for(nextEvent in returnVal){
-                        println("AAAAAAAAAA found event ${nextEvent.name}")
-                        weekEvents.add(nextEvent.toWeekEvent())
-                }
 //
+            for(e in events){
+                if(e.month == newMonth && e.year == newYear){
+                    weekEvents.add(e.toWeekEvent())
+                }
             }
 
-//            for(e in events){
-//                if(e.month == newMonth && e.year == newYear){
-//                    weekEvents.add(e.toWeekEvent())
-//                }
-//            }
-
-//            val startTime = Calendar.getInstance()
-//            startTime.set(Calendar.HOUR_OF_DAY, 3)
-//            startTime.set(Calendar.MINUTE, 0)
-//            startTime.set(Calendar.MONTH, newMonth - 1)
-//            startTime.set(Calendar.YEAR, newYear)
-//            val endTime = startTime.clone() as Calendar
-//            endTime.add(Calendar.HOUR, 1)
-//            endTime.set(Calendar.MONTH, newMonth - 1)
-//            val event = WeekViewEvent(1, "Just show Somerthing", startTime, endTime)
-//            event.color = Color.parseColor("#000000")
-//            weekEvents.add(event)
             return weekEvents
 
         }
