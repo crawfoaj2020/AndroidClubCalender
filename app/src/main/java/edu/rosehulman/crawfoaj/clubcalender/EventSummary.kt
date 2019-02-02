@@ -103,6 +103,11 @@ class EventSummary : AppCompatActivity() {
             val user = auth.currentUser
             if (user != null){
                 Log.d("Rose","Log in succeeded")
+                if (auth.uid != "liur5"){
+                    fab.hide()
+                }else{
+                    fab.show()
+                }
             }else{
                 val signInIntent = Rosefire.getSignInIntent(this, REGISTRY_TOKEN)
                 Log.d("Rose","Starting Login activity")
