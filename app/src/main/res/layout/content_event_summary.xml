@@ -23,7 +23,8 @@
             app:noOfVisibleDays="3"
             app:headerRowBackgroundColor="#ffefefef"
             app:dayBackgroundColor="#05000000"
-            app:todayBackgroundColor="#1848adff"
+            app:todayBackgroundColor="@color/colorTodayColor"
+            app:todayHeaderTextColor="@color/colorPrimary"
             app:headerColumnBackground="#ffffffff"/>
 
 

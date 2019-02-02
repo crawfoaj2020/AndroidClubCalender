@@ -25,6 +25,19 @@ class CreateEvent : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_event)
         setSupportActionBar(toolbar)
+        if(intent.getParcelableExtra<EventModelObject>(EventModelObject.KEY) != null) {
+            var event: EventModelObject = intent.getParcelableExtra(EventModelObject.KEY)
+            println("AAAAAAAAAA $event (only print if editing event")
+            name_field.setText(event.name)
+            description_field.setText(event.description)
+            date_field.text =  "${event.month+1}/$event.day/$event.year"
+            location_field.setText(event.location)
+            if(event.repeatsWeekly){
+                repeat_field.isChecked = true
+            }
+            time_field.text =event.getTimeFormatted()
+
+        }
     }
 
     fun showTimePickerDialog(v: View) {

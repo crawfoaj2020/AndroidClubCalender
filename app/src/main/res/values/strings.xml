@@ -16,4 +16,5 @@
     <string name="club_unspecified">Please select a club</string>
     <string name="title_activity_create_event">CreateEvent</string>
     <string name="save">Save</string>
+    <string name="edit">Edit</string>
 </resources>

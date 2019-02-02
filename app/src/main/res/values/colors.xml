@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#480001</color>
     <color name="colorAccent">#dfb7b7</color>
     <color name="color_unspecified">#777</color>
+    <color name="colorTodayColor">#25660000</color>
+    <color name="orginalBlue">#1848adff</color>
 </resources>

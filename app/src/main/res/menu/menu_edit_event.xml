@@ -3,11 +3,10 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="edu.rosehulman.crawfoaj.clubcalender.CreateEvent">
     <item
-            android:id="@+id/action_save_event"
-            android:title="@string/save"
+            android:id="@+id/action_edit_event"
+            android:title="@string/edit"
             app:showAsAction="ifRoom"
-            android:icon="@android:drawable/ic_menu_save"
-        />
-
+            android:icon="@android:drawable/ic_menu_edit"
+    />
 
 </menu>
