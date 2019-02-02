@@ -103,6 +103,8 @@ class EventSummary : AppCompatActivity() {
             val user = auth.currentUser
             if (user != null){
                 Log.d("Rose","Log in succeeded")
+
+                //Temporary, hiding Fab if user not Valerie
                 if (auth.uid != "liur5"){
                     fab.hide()
                 }else{
