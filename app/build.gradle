@@ -19,6 +19,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            multiDexEnabled true
+        }
     }
     repositories{
         maven { url "https://maven.csse.rose-hulman.edu/artifactory/libs-release" }

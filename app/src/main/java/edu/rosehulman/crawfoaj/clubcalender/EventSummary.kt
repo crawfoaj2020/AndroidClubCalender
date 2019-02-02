@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.content.Intent
 import android.graphics.RectF
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.widget.Toast
 import com.alamkanak.weekview.MonthLoader
@@ -21,6 +22,7 @@ import edu.rosehulman.rosefire.Rosefire
 import kotlinx.android.synthetic.main.activity_event_summary.*
 
 class EventSummary : AppCompatActivity() {
+
 
     var events = arrayListOf<EventModelObject>()
     private val allEventsRef = FirebaseFirestore
@@ -172,10 +174,30 @@ class EventSummary : AppCompatActivity() {
         }
     }
 
+
     inner class weekViewListeners():WeekView.EventClickListener,
         MonthLoader.MonthChangeListener,  WeekView.EventLongPressListener{
-        override fun onEventLongPress(event: WeekViewEvent?, eventRect: RectF?) {
-            //No reaction yet, eventually delete
+
+        override fun onEventLongPress(weekEvent: WeekViewEvent?, eventRect: RectF?) {
+            println("AAAAAAAA long press")
+            if(weekEvent == null){
+                return
+            }
+
+            val builder = AlertDialog.Builder(this@EventSummary)
+            builder.setTitle("Are you sure you would like to delete this event?")
+            builder.setPositiveButton(android.R.string.ok) { _, _ ->
+                var id = weekEvent.id
+                for(event in events){
+                    if(event.key == id){
+                        allEventsRef.document(event.id).delete()
+                        break
+                    }
+                }
+            }
+            builder.setNeutralButton(android.R.string.cancel, null)
+            builder.create().show()
+
         }
 
         override fun onMonthChange(newYear: Int, newMonth: Int): MutableList<out WeekViewEvent> {

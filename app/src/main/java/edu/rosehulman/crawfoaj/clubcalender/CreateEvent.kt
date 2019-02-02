@@ -19,7 +19,8 @@ import kotlinx.android.synthetic.main.content_create_event.*
 import java.util.*
 
 class CreateEvent : AppCompatActivity() {
-    val event = EventModelObject()
+    var event = EventModelObject()
+    var wasNewEvent = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,15 +28,17 @@ class CreateEvent : AppCompatActivity() {
         setSupportActionBar(toolbar)
         if(intent.getParcelableExtra<EventModelObject>(EventModelObject.KEY) != null) {
             var event: EventModelObject = intent.getParcelableExtra(EventModelObject.KEY)
-            println("AAAAAAAAAA $event (only print if editing event")
             name_field.setText(event.name)
             description_field.setText(event.description)
-            date_field.text =  "${event.month+1}/$event.day/$event.year"
+            date_field.text =  "${event.month+1}/${event.day}/${event.year}"
             location_field.setText(event.location)
             if(event.repeatsWeekly){
                 repeat_field.isChecked = true
             }
             time_field.text =event.getTimeFormatted()
+            this.event = event
+            println("AAAAAAA on Create id is ${this.event.id}")
+            wasNewEvent = false
 
         }
     }
@@ -64,6 +67,7 @@ class CreateEvent : AppCompatActivity() {
         event.repeatsWeekly = repeat_field.isChecked
         event.club = club_field.text.toString()
         intent.putExtra(KEY_NEW_EVENT,event)
+        intent.putExtra(KEY_WAS_NEW_EVENT, wasNewEvent)
         setResult(Activity.RESULT_OK,intent)
         finish()
     }
@@ -86,6 +90,7 @@ class CreateEvent : AppCompatActivity() {
 
     companion object {
         val KEY_NEW_EVENT = "new event"
+        val KEY_WAS_NEW_EVENT = "boolIfEventNewOrUpdated"
 
         class MyTimePicker() : DialogFragment(),TimePickerDialog.OnTimeSetListener {
 

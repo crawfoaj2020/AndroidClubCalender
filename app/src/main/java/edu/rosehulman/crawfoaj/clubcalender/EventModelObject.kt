@@ -13,15 +13,17 @@ data class EventModelObject (
     var description:String ="",
     var location:String = "",
     var club:String ="",
+
     var hour:Int = 0,
     var min:Int = 0,
     var year:Int = 2019,
     var month:Int = 1,
     var day:Int = 1,
-    var repeatsWeekly:Boolean = true,
-    var key:Long = EventModelObject.getUnusedId()): Parcelable {
+    var repeatsWeekly:Boolean = true
+    ): Parcelable {
 
     var id = ""
+    var key:Long = -1
 
 
     constructor(parcel: Parcel) : this(
@@ -29,6 +31,7 @@ data class EventModelObject (
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
@@ -36,6 +39,11 @@ data class EventModelObject (
         parcel.readInt(),
         parcel.readByte() != 0.toByte()
     )
+
+    fun setIdAndKey(newId: String){
+        id = newId
+        key = newId.hashCode().toLong()
+    }
 
     fun toWeekEvent(): WeekViewEvent{
         var startTime = Calendar.getInstance()
@@ -65,6 +73,8 @@ data class EventModelObject (
         parcel.writeInt(month)
         parcel.writeInt(day)
         parcel.writeByte((if (repeatsWeekly) 1 else 0).toByte())
+
+        parcel.writeString(id)
     }
 
     override fun describeContents(): Int {
@@ -80,34 +90,37 @@ data class EventModelObject (
 
     companion object CREATOR : Parcelable.Creator<EventModelObject> {
         val KEY = "GetEvent"
-        var avalibleKeys: MutableList<Long>? = null
-        private fun setupKeys(){
-            avalibleKeys = mutableListOf()
+//        var avalibleKeys: MutableList<Long>? = null
+//        private fun setupKeys(){
+//            avalibleKeys = mutableListOf()
+//
+//            for(i in 0..1000){
+//                avalibleKeys!!.add(i.toLong())
+//            }
+//        }
 
-            for(i in 0..1000){
-                avalibleKeys!!.add(i.toLong())
-            }
-        }
+//        fun getUnusedId():Long{
+//            if(avalibleKeys == null){
+//                setupKeys()
+//            }
+//            return avalibleKeys!!.removeAt(0)
 
-        fun getUnusedId():Long{
-            if(avalibleKeys == null){
-                setupKeys()
-            }
-            return avalibleKeys!!.removeAt(0)
-        }
+//        }
 
-        //Cal when delete an event
-        fun makeIdAvalible(id:Long){
-            avalibleKeys!!.add(id)
-        }
+//        //Cal when delete an event
+//        fun makeIdAvalible(id:Long){
+//            avalibleKeys!!.add(id)
+//        }
 
         override fun createFromParcel(parcel: Parcel): EventModelObject {
-            return EventModelObject(parcel)
+            val newEvent = EventModelObject(parcel)
+            newEvent.setIdAndKey(parcel.readString())
+            return newEvent
         }
 
         fun fromSnapshot(snapshot: DocumentSnapshot): EventModelObject{
             val event = snapshot.toObject(EventModelObject::class.java)!!
-            event.id = snapshot.id
+            event.setIdAndKey(snapshot.id)
             return event
         }
 
