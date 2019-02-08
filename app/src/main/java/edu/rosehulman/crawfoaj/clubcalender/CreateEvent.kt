@@ -1,12 +1,10 @@
 package edu.rosehulman.crawfoaj.clubcalender
 
-import android.app.Activity
-import android.app.DatePickerDialog
-import android.app.Dialog
-import android.app.TimePickerDialog
+import android.app.*
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem
 import android.view.View
@@ -21,11 +19,14 @@ import java.util.*
 class CreateEvent : AppCompatActivity() {
     var event = EventModelObject()
     var wasNewEvent = true
+    lateinit var managedClubs: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_event)
         setSupportActionBar(toolbar)
+
+        //If true actually editing not creating
         if(intent.getParcelableExtra<EventModelObject>(EventModelObject.KEY) != null) {
             var event: EventModelObject = intent.getParcelableExtra(EventModelObject.KEY)
             name_field.setText(event.name)
@@ -39,7 +40,11 @@ class CreateEvent : AppCompatActivity() {
             this.event = event
             println("AAAAAAA on Create id is ${this.event.id}")
             wasNewEvent = false
+        }
 
+        if(intent.getStringArrayListExtra(User.KEY) != null){
+            managedClubs = intent.getStringArrayListExtra(User.KEY)
+            println("AAAAAAA got list $managedClubs")
         }
     }
 
@@ -57,6 +62,22 @@ class CreateEvent : AppCompatActivity() {
         val datePicker = MyDatePicker()
         datePicker.arguments = bundle
         datePicker.show(supportFragmentManager,"datePicker")
+    }
+
+    fun showClubPickerDialog(v: View){
+
+        var builder= AlertDialog.Builder(this)
+        var managedClubsArr = managedClubs.toTypedArray() as Array<CharSequence>
+        println("AAAAAAAA ${managedClubsArr.javaClass}")
+        builder.setTitle("Please select a club")
+        builder.setItems(managedClubsArr,{_, position ->
+            updateClubName(managedClubs[position])
+        })
+        builder.create().show()
+    }
+
+    fun updateClubName(name: String){
+        club_field.text = name
     }
 
     fun saveEvent(v:View){

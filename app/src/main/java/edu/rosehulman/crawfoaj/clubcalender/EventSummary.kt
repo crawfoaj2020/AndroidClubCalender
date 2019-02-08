@@ -14,6 +14,7 @@ import com.alamkanak.weekview.MonthLoader
 import com.alamkanak.weekview.WeekView
 import com.alamkanak.weekview.WeekViewEvent
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -27,12 +28,15 @@ class EventSummary : AppCompatActivity() {
     var events = arrayListOf<EventModelObject>()
     private val allEventsRef = FirebaseFirestore
         .getInstance().collection(Constants.EVENTS_COLLECTION)
+    private val userRef = FirebaseFirestore.getInstance().collection(Constants.USER_COLLECTION)
+
     val CREATE_EVENT_REQUEST_CODE = 1
     lateinit var mWeekView: WeekView
     private val REGISTRY_TOKEN = "9dbad222-43fa-40bd-8354-6b1eb67c647b"
     private val ROSEFIRE_LOGIN_REQUEST_CODE = 2
     lateinit var authListener: FirebaseAuth.AuthStateListener
     val auth = FirebaseAuth.getInstance()
+    lateinit var curUser: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +56,7 @@ class EventSummary : AppCompatActivity() {
 
         fab.setOnClickListener { view ->
             val intent = Intent(this,CreateEvent::class.java)
+            intent.putExtra(User.KEY, curUser.managedClubs)
             startActivityForResult(intent,CREATE_EVENT_REQUEST_CODE)
         }
 
@@ -103,18 +108,64 @@ class EventSummary : AppCompatActivity() {
             val user = auth.currentUser
             if (user != null){
                 Log.d("Rose","Log in succeeded")
+                updateUserBasedInfo(user)
 
-                //Temporary, hiding Fab if user not Valerie
-                if (auth.uid != "liur5"){
-                    fab.hide()
-                }else{
-                    fab.show()
-                }
+
             }else{
                 val signInIntent = Rosefire.getSignInIntent(this, REGISTRY_TOKEN)
                 Log.d("Rose","Starting Login activity")
                 startActivityForResult(signInIntent, ROSEFIRE_LOGIN_REQUEST_CODE)
             }
+        }
+    }
+
+    private fun updateUserBasedInfo(user: FirebaseUser) {
+        //Make sure have a user
+        userRef.whereEqualTo("username", user.uid).get().addOnSuccessListener {
+            if(it.isEmpty){
+                val emptyList = arrayListOf<String>()
+                if(user.uid == "liur5"){
+                    val clubList = arrayListOf<String>(
+                        "Board Game Club",
+                        "Volleyball Club",
+                        "Anime Club"
+                        )
+                    val user = User(user.uid, emptyList, clubList)
+                    userRef.add(user)
+
+                }else if (user.uid == "crawfoaj"){
+                    println("AAAAAAAA adding ALyssa")
+                    val clubList = arrayListOf<String>(
+                        "MakerLab",
+                        "D&D"
+                    )
+                    val user = User(user.uid, emptyList, clubList)
+                    userRef.add(user)
+                }
+            }
+        }
+
+        userRef.whereEqualTo("username", user.uid).get().addOnSuccessListener {
+            for(i in it){
+                curUser = User.fromSnapshot(i)
+                println("AAAAAAA ${curUser.managedClubs}")
+                if(curUser.managedClubs.isEmpty()){
+                    updateFab(false)
+                }else{
+                    updateFab(true)
+                }
+            }
+
+        }
+
+    }
+
+    private fun updateFab(showFab:Boolean){
+        if(showFab){
+            fab.show()
+        }else{
+            println("AAAAAA here fab should hide")
+            fab.hide()
         }
     }
 
@@ -175,6 +226,7 @@ class EventSummary : AppCompatActivity() {
                             Log.d("Rose","Calling authListener")
                             Log.d("Rose","User id = ${auth.uid}")
                             authListener.onAuthStateChanged(auth)
+
                         }
                     }
             }

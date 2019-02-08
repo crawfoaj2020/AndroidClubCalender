@@ -139,6 +139,7 @@
                 android:text="@string/club_unspecified"
                 android:textSize="@dimen/default_font_size"
                 android:id="@+id/club_field"
+                android:onClick="showClubPickerDialog"
         />
 
         <Button

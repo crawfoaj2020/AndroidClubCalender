@@ -90,27 +90,6 @@ data class EventModelObject (
 
     companion object CREATOR : Parcelable.Creator<EventModelObject> {
         val KEY = "GetEvent"
-//        var avalibleKeys: MutableList<Long>? = null
-//        private fun setupKeys(){
-//            avalibleKeys = mutableListOf()
-//
-//            for(i in 0..1000){
-//                avalibleKeys!!.add(i.toLong())
-//            }
-//        }
-
-//        fun getUnusedId():Long{
-//            if(avalibleKeys == null){
-//                setupKeys()
-//            }
-//            return avalibleKeys!!.removeAt(0)
-
-//        }
-
-//        //Cal when delete an event
-//        fun makeIdAvalible(id:Long){
-//            avalibleKeys!!.add(id)
-//        }
 
         override fun createFromParcel(parcel: Parcel): EventModelObject {
             val newEvent = EventModelObject(parcel)
