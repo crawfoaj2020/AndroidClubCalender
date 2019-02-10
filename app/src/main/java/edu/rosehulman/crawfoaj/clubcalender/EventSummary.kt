@@ -121,7 +121,7 @@ class EventSummary : AppCompatActivity() {
             if (user != null){
 //                Log.d("Rose","Log in succeeded")
                 println("AAAAAAAAAA Log in succeedded")
-//                updateUserBasedInfo()
+                updateUserBasedInfo()
                 mWeekView.notifyDatasetChanged()
 
 
