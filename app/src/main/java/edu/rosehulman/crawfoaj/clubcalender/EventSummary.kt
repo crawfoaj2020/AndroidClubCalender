@@ -21,6 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import edu.rosehulman.rosefire.Rosefire
 
 import kotlinx.android.synthetic.main.activity_event_summary.*
+import java.lang.Thread.sleep
 
 class EventSummary : AppCompatActivity() {
 
@@ -36,7 +37,7 @@ class EventSummary : AppCompatActivity() {
     private val ROSEFIRE_LOGIN_REQUEST_CODE = 2
     lateinit var authListener: FirebaseAuth.AuthStateListener
     val auth = FirebaseAuth.getInstance()
-    lateinit var curUser: User
+    var curUser: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +48,8 @@ class EventSummary : AppCompatActivity() {
         mWeekView = findViewById(R.id.weekView)
 
         addAuthStateListener()
+        updateUserBasedInfo()
         addSnapshotListener()
-//        println("AAAAAAAAAAAAApast snapshot listener")
 
         mWeekView.setOnEventClickListener(listener)
         mWeekView.monthChangeListener = listener
@@ -56,7 +57,7 @@ class EventSummary : AppCompatActivity() {
 
         fab.setOnClickListener { view ->
             val intent = Intent(this,CreateEvent::class.java)
-            intent.putExtra(User.KEY, curUser.managedClubs)
+            intent.putExtra(User.KEY, curUser!!.managedClubs)
             startActivityForResult(intent,CREATE_EVENT_REQUEST_CODE)
         }
 
@@ -116,9 +117,12 @@ class EventSummary : AppCompatActivity() {
     private fun addAuthStateListener() {
         authListener = FirebaseAuth.AuthStateListener { auth: FirebaseAuth ->
             val user = auth.currentUser
+            println("AAAAAAAAA in auth state list")
             if (user != null){
-                Log.d("Rose","Log in succeeded")
-                updateUserBasedInfo(user)
+//                Log.d("Rose","Log in succeeded")
+                println("AAAAAAAAAA Log in succeedded")
+//                updateUserBasedInfo()
+                mWeekView.notifyDatasetChanged()
 
 
             }else{
@@ -129,9 +133,15 @@ class EventSummary : AppCompatActivity() {
         }
     }
 
-    private fun updateUserBasedInfo(user: FirebaseUser) {
+    private fun updateUserBasedInfo() {
+        val user = auth.currentUser
+        if(user == null){
+            println("AAAAAAAAAAAA User was null, bailed on updateUserInfo")
+            return
+        }
         //Make sure have a user
         userRef.whereEqualTo("username", user.uid).get().addOnSuccessListener {
+            println("AAAAAAAA in on success")
             if(it.isEmpty){
                 val emptyList = arrayListOf<String>()
                 if(user.uid == "liur5"){
@@ -160,14 +170,18 @@ class EventSummary : AppCompatActivity() {
                     userRef.add(user)
                 }
             }
+            mWeekView.notifyDatasetChanged()
         }
 
+
+
         userRef.whereEqualTo("username", user.uid).get().addOnSuccessListener {
+            println("AAAAAAAAAAA updating user")
             for(i in it){
                 curUser = User.fromSnapshot(i)
                 println("AAAAAAAA set currentUser to $curUser")
-                println("AAAAAAA ${curUser.managedClubs}")
-                if(curUser.managedClubs.isEmpty()){
+                println("AAAAAAA ${curUser!!.managedClubs}")
+                if(curUser!!.managedClubs.isEmpty()){
                     updateFab(false)
                 }else{
                     updateFab(true)
@@ -290,8 +304,11 @@ class EventSummary : AppCompatActivity() {
             var weekEvents = arrayListOf<WeekViewEvent>()
 //
             for(e in events){
-                if(e.month == newMonth && e.year == newYear && e.club in curUser.interestedClubs){
-                    weekEvents.add(e.toWeekEvent())
+//                && e.club in curUser.interestedClubs
+                if(e.month == newMonth && e.year == newYear) {
+                    if (curUser != null && e.club in curUser!!.interestedClubs) {
+                        weekEvents.add(e.toWeekEvent())
+                    }
                 }
             }
 
