@@ -18,13 +18,13 @@
     <string name="save">Save</string>
     <string name="edit">Edit</string>
     <string name="logout">Logout</string>
-    <string name="action_club_list">Displayed clubs</string>
+    <string name="club_list">Displayed clubs</string>
     <string name="dialog_title_update_club_list">Please select clubs you would like to see events for:</string>
     <string-array name="all_clubs">
-        Board Game Club,
-        Volleyball Club,
-        Anime Club,
-        MakerLab,
-        D&amp;D
+        <item>Board Game Club</item>
+        <item>Volleyball Club</item>
+        <item>Anime Club</item>
+        <item>MakerLab</item>
+        <item>D&amp;D</item>
     </string-array>
 </resources>

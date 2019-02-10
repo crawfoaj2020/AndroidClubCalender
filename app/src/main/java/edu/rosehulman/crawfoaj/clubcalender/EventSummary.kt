@@ -1,6 +1,7 @@
 package edu.rosehulman.crawfoaj.clubcalender
 
 import android.app.Activity
+import android.app.Dialog
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu
@@ -84,7 +85,36 @@ class EventSummary : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_club_list -> {
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle(R.string.dialog_title_update_club_list)
+
+                val allClubs = resources.getStringArray(R.array.all_clubs)
+                val checkedItems = booleanArrayOf(false, false, false, false, false)
+                for ((pos,club) in allClubs.withIndex()){
+                    if (club in curUser!!.interestedClubs){
+                        checkedItems[pos] = true
+                    }
+                }
+                builder.setMultiChoiceItems(allClubs,checkedItems){dialog,which,isChecked ->
+                    checkedItems[which] = isChecked
+                }
+
+                builder.setPositiveButton(android.R.string.ok){_,_ ->
+                    val newClubList = arrayListOf<String>()
+                    for ((pos,bool) in checkedItems.withIndex()){
+                        if (bool){
+                            newClubList.add(allClubs[pos])
+                        }
+                    }
+                    curUser?.interestedClubs = newClubList
+                    userRef.document(curUser!!.id).update("interestedClubs",newClubList)
+                    mWeekView.notifyDatasetChanged()
+                }
+
+                builder.create().show()
+                true
+            }
             R.id.action_logout -> {
                 auth.signOut()
                 true
@@ -172,8 +202,6 @@ class EventSummary : AppCompatActivity() {
             }
             mWeekView.notifyDatasetChanged()
         }
-
-
 
         userRef.whereEqualTo("username", user.uid).get().addOnSuccessListener {
             println("AAAAAAAAAAA updating user")
