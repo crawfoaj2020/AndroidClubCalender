@@ -1,7 +1,6 @@
 package edu.rosehulman.crawfoaj.clubcalender
 
 import android.app.Activity
-import android.app.Dialog
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu
@@ -15,14 +14,12 @@ import com.alamkanak.weekview.MonthLoader
 import com.alamkanak.weekview.WeekView
 import com.alamkanak.weekview.WeekViewEvent
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import edu.rosehulman.rosefire.Rosefire
 
 import kotlinx.android.synthetic.main.activity_event_summary.*
-import java.lang.Thread.sleep
 
 class EventSummary : AppCompatActivity() {
 
@@ -332,16 +329,11 @@ class EventSummary : AppCompatActivity() {
             var weekEvents = arrayListOf<WeekViewEvent>()
 //
             for(e in events){
-//                && e.club in curUser.interestedClubs
-                if(e.month == newMonth && e.year == newYear) {
-                    if (curUser != null && e.club in curUser!!.interestedClubs) {
-                        weekEvents.add(e.toWeekEvent())
-                    }
+                if (curUser != null && e.club in curUser!!.interestedClubs) {
+                    weekEvents.addAll(e.getAllOccurrences(newMonth,newYear))
                 }
             }
-
             return weekEvents
-
         }
 
         override fun onEventClick(weekEvent: WeekViewEvent?, eventRect: RectF?) {

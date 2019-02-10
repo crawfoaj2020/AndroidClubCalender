@@ -62,6 +62,38 @@ data class EventModelObject (
         return weekEvent
     }
 
+    private fun toWeekEvent(start: Calendar?):WeekViewEvent {
+        val end = start!!.clone() as Calendar
+        end.add(Calendar.HOUR_OF_DAY,1)
+        val weekEvent = WeekViewEvent(key,name,location,start,end)
+        weekEvent.color = Color.parseColor("#777777")
+        return weekEvent
+    }
+
+    fun getAllOccurrences(targetMonth: Int, targetYear: Int) :List<WeekViewEvent> {
+        val occurrences =  arrayListOf<WeekViewEvent>()
+        if (!repeatsWeekly){
+            if (this.month == targetMonth && this.year == targetYear){
+                occurrences.add(this.toWeekEvent())
+            }
+        }else{
+            if (this.year > targetYear || (this.year == targetYear && this.month > targetMonth))
+                return emptyList()
+            val calendar = Calendar.getInstance()
+            calendar.set(year,month,day)
+            val target = Calendar.getInstance()
+            target.set(targetYear,targetMonth,0)
+            while (calendar.before(target)){
+                calendar.add(Calendar.WEEK_OF_YEAR,1)
+            }
+            while (calendar.get(Calendar.MONTH) == targetMonth){
+                occurrences.add(toWeekEvent(calendar))
+                calendar.add(Calendar.WEEK_OF_YEAR,1)
+            }
+        }
+        return occurrences
+    }
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeString(description)
