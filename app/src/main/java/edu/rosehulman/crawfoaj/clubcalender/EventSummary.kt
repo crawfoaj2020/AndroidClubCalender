@@ -46,8 +46,8 @@ class EventSummary : AppCompatActivity() {
         val listener = weekViewListeners()
         mWeekView = findViewById(R.id.weekView)
 
-        addSnapshotListener()
         addAuthStateListener()
+        addSnapshotListener()
 //        println("AAAAAAAAAAAAApast snapshot listener")
 
         mWeekView.setOnEventClickListener(listener)
@@ -101,7 +101,17 @@ class EventSummary : AppCompatActivity() {
 //                println("AAAAAAAAAAA snapshot listener triggered")
                 processSnapshotDiffs(snapshot!!)
             }
+
+        userRef
+            .addSnapshotListener { snapshot, firestoreException ->
+                if (firestoreException != null) {
+                    return@addSnapshotListener
+                }
+//                println("AAAAAAAAAAA snapshot listener triggered")
+                processUserSnapshotDiffs(snapshot!!)
+            }
     }
+
 
     private fun addAuthStateListener() {
         authListener = FirebaseAuth.AuthStateListener { auth: FirebaseAuth ->
@@ -130,7 +140,11 @@ class EventSummary : AppCompatActivity() {
                         "Volleyball Club",
                         "Anime Club"
                         )
-                    val user = User(user.uid, emptyList, clubList)
+                    val interestedList = arrayListOf<String>(
+                        "Volleyball Club",
+                        "Anime Club"
+                    )
+                    val user = User(user.uid, interestedList, clubList)
                     userRef.add(user)
 
                 }else if (user.uid == "crawfoaj"){
@@ -139,7 +153,10 @@ class EventSummary : AppCompatActivity() {
                         "MakerLab",
                         "D&D"
                     )
-                    val user = User(user.uid, emptyList, clubList)
+                    val interestedList = arrayListOf<String>(
+                        "D&D"
+                    )
+                    val user = User(user.uid, interestedList, clubList)
                     userRef.add(user)
                 }
             }
@@ -148,6 +165,7 @@ class EventSummary : AppCompatActivity() {
         userRef.whereEqualTo("username", user.uid).get().addOnSuccessListener {
             for(i in it){
                 curUser = User.fromSnapshot(i)
+                println("AAAAAAAA set currentUser to $curUser")
                 println("AAAAAAA ${curUser.managedClubs}")
                 if(curUser.managedClubs.isEmpty()){
                     updateFab(false)
@@ -172,32 +190,40 @@ class EventSummary : AppCompatActivity() {
     private fun processSnapshotDiffs(snapshot: QuerySnapshot) {
         for (documentChange in snapshot.documentChanges) {
             val curEvent = EventModelObject.fromSnapshot(documentChange.document)
-            when (documentChange.type) {
-                DocumentChange.Type.ADDED -> {
+            val id = auth.currentUser?.uid
+
+            //if (curEvent.club in curUser.interestedClubs){
+                when (documentChange.type) {
+                    DocumentChange.Type.ADDED -> {
 //                    println("AAAAAAAA adding an event ${curEvent.name}")
 //                    print("AAAAAAAAAA print 3 (once per event)")
-                    events.add(curEvent)
-                    mWeekView.notifyDatasetChanged()
-                }
-                DocumentChange.Type.REMOVED -> {
+                        events.add(curEvent)
+                        mWeekView.notifyDatasetChanged()
+                    }
+                    DocumentChange.Type.REMOVED -> {
 
-                    val index = events.indexOfFirst { curEvent.id == it.id }
-                    events.removeAt(index)
-                    mWeekView.notifyDatasetChanged()
+                        val index = events.indexOfFirst { curEvent.id == it.id }
+                        events.removeAt(index)
+                        mWeekView.notifyDatasetChanged()
 
-                }
-                DocumentChange.Type.MODIFIED -> {
-                    for ((index, mq) in events.withIndex()) {
-                        if (mq.id == curEvent.id) {
-                            events[index] = curEvent
-                            mWeekView.notifyDatasetChanged()
-                            break
+                    }
+                    DocumentChange.Type.MODIFIED -> {
+                        for ((index, mq) in events.withIndex()) {
+                            if (mq.id == curEvent.id) {
+                                events[index] = curEvent
+                                mWeekView.notifyDatasetChanged()
+                                break
+                            }
                         }
                     }
                 }
-            }
+            //}
         }
 //        println("AAAAAAA $events")
+    }
+
+    private fun processUserSnapshotDiffs(snapshot: QuerySnapshot) {
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -264,7 +290,7 @@ class EventSummary : AppCompatActivity() {
             var weekEvents = arrayListOf<WeekViewEvent>()
 //
             for(e in events){
-                if(e.month == newMonth && e.year == newYear){
+                if(e.month == newMonth && e.year == newYear && e.club in curUser.interestedClubs){
                     weekEvents.add(e.toWeekEvent())
                 }
             }

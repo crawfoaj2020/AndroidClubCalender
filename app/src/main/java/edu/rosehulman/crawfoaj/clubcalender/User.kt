@@ -4,7 +4,7 @@ import android.os.Parcelable
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Exclude
 
-data class User(var username: String = "", var instrestedClubs: ArrayList<String> = arrayListOf(), var managedClubs: ArrayList<String> = arrayListOf()) {
+data class User(var username: String = "", var interestedClubs: ArrayList<String> = arrayListOf(), var managedClubs: ArrayList<String> = arrayListOf()) {
     @get:Exclude
     var id = ""
 
