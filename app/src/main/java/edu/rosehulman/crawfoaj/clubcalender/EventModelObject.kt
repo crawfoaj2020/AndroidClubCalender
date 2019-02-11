@@ -135,10 +135,13 @@ data class EventModelObject (
         return 0
     }
 
-    fun getTimeFormatted():String{
+    fun getTimeFormatted(wantEndTime: Boolean):String{
         val format = SimpleDateFormat("hh:mm a")
         val time = Calendar.getInstance()
         time.set(year,month,day,hour,min)
+        if(wantEndTime){
+            time.set(year, month, day, endHour, endMin)
+        }
         return format.format(time.time)
     }
 

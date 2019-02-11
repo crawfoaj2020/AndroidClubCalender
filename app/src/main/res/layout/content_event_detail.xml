@@ -102,6 +102,29 @@
     />
 
     <TextView
+            android:text="@string/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ConstantsTimeEnd"
+            android:paddingBottom="@dimen/margin_between_title_and_content"
+            android:textSize="@dimen/default_font_size"
+            android:textStyle="bold"
+            android:layout_below="@id/ValueTime"
+
+    />
+
+    <TextView
+            android:text="@string/blank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ValueTimeEnd"
+            android:paddingBottom="@dimen/margin_between_items"
+            android:textSize="@dimen/default_font_size"
+            android:layout_below="@+id/ConstantsTimeEnd"
+
+    />
+
+    <TextView
             android:text="@string/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -109,7 +132,7 @@
             android:paddingBottom="@dimen/margin_between_title_and_content"
             android:textSize="@dimen/default_font_size"
             android:textStyle="bold"
-            android:layout_below="@id/ValueTime"
+            android:layout_below="@id/ValueTimeEnd"
 
     />
 

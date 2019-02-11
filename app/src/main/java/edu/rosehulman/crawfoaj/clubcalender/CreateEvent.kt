@@ -36,7 +36,7 @@ class CreateEvent : AppCompatActivity() {
             if(event.repeatsWeekly){
                 repeat_field.isChecked = true
             }
-            time_field.text =event.getTimeFormatted()
+            time_field.text =event.getTimeFormatted(false)
             club_field.text = event.club
             this.event = event
             println("AAAAAAA on Create id is ${this.event.id}")
@@ -140,7 +140,7 @@ class CreateEvent : AppCompatActivity() {
             override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
                 event.hour = hourOfDay
                 event.min = minute
-                activity!!.findViewById<TextView>(R.id.time_field).text = event.getTimeFormatted()
+                activity!!.findViewById<TextView>(R.id.time_field).text = event.getTimeFormatted(false)
             }
 
             override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

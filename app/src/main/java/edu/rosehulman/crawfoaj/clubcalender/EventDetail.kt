@@ -38,7 +38,8 @@ class EventDetail : AppCompatActivity() {
         ValueDescription.text = event.description
         ValueLocation.text = event.location
 
-        ValueTime.text = event.getTimeFormatted() //TODO figure out AM vs PM
+        ValueTime.text = event.getTimeFormatted(false) //TODO figure out AM vs PM
+        ValueTimeEnd.text = event.getTimeFormatted(true)
         if(day!=null && month != null && year != null){
             val oneIndexedMonth = month!! +1
             ValueDate.text = getString(R.string.Dateformat, oneIndexedMonth, day, year)
