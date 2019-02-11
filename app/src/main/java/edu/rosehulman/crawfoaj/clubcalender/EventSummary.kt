@@ -20,6 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import edu.rosehulman.rosefire.Rosefire
 
 import kotlinx.android.synthetic.main.activity_event_summary.*
+import java.util.*
 
 class EventSummary : AppCompatActivity() {
 
@@ -347,6 +348,10 @@ class EventSummary : AppCompatActivity() {
             for(event in events){
                 if(event.key == id){
                     intent.putExtra(EventModelObject.KEY, event)
+                    intent.putExtra(EventModelObject.DAY, weekEvent.startTime.get(Calendar.DAY_OF_MONTH))
+                    intent.putExtra(EventModelObject.MONTH, weekEvent.startTime.get(Calendar.MONTH))
+                    intent.putExtra(EventModelObject.YEAR, weekEvent.startTime.get(Calendar.YEAR))
+//                    intent.putInt(EventModelObject.CALENDER_KEY, weekEvent)
                     break
                 }
             }

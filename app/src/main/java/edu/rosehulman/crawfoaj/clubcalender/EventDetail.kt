@@ -18,13 +18,18 @@ import java.util.*
 
 class EventDetail : AppCompatActivity() {
     var event = EventModelObject()
-    var date:Calendar? = null
+    var day:Int? =null
+    var month:Int?=null
+    var year:Int?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_detail)
         setSupportActionBar(toolbar)
         event = intent.getParcelableExtra(EventModelObject.KEY)
+        day = intent.getIntExtra(EventModelObject.DAY, 0)
+        month = intent.getIntExtra(EventModelObject.MONTH, 0)
+        year = intent.getIntExtra(EventModelObject.YEAR, 0)
         setValues()
     }
 
@@ -32,9 +37,17 @@ class EventDetail : AppCompatActivity() {
         ValueName.text = event.name
         ValueDescription.text = event.description
         ValueLocation.text = event.location
+
         ValueTime.text = event.getTimeFormatted() //TODO figure out AM vs PM
-        val oneIndexedMonth = event.month +1
-        ValueDate.text = "${oneIndexedMonth}/${event.day}/${event.year}"
+        if(day!=null && month != null && year != null){
+            val oneIndexedMonth = month!! +1
+            ValueDate.text = getString(R.string.Dateformat, oneIndexedMonth, day, year)
+        }else{
+            val oneIndexedMonth = event.month +1
+            ValueDate.text = getString(R.string.Dateformat, oneIndexedMonth, event.day, event.year)
+        }
+
+
         ValueClub.text = event.club
     }
 
