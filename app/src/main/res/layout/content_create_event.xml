@@ -69,7 +69,7 @@
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/time"
+                android:text="@string/start_time"
                 android:layout_marginTop="@dimen/margin_between_items"
                 android:textSize="@dimen/default_font_size"
                 android:layout_marginBottom="@dimen/margin_between_title_and_content"
@@ -84,6 +84,26 @@
                 android:textSize="@dimen/default_font_size"
                 android:id="@+id/time_field"
                 android:onClick="showTimePickerDialog"
+        />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/duration"
+                android:layout_marginTop="@dimen/margin_between_items"
+                android:textSize="@dimen/default_font_size"
+                android:layout_marginBottom="@dimen/margin_between_title_and_content"
+                android:textStyle="bold"
+        />
+
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_unspecified"
+                android:text="@string/duration_unspecified"
+                android:textSize="@dimen/default_font_size"
+                android:inputType="number"
+                android:id="@+id/duration_field"
         />
 
         <TextView
