@@ -20,6 +20,7 @@
     <string name="logout">Logout</string>
     <string name="club_list">Displayed clubs</string>
     <string name="dialog_title_update_club_list">Please select clubs you would like to see events for:</string>
+    <string name="CreateEventClubDialogTittle">Please select a club</string>
     <string-array name="all_clubs">
         <item>Board Game Club</item>
         <item>Volleyball Club</item>

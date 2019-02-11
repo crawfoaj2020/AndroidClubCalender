@@ -14,9 +14,11 @@ import edu.rosehulman.rosefire.Rosefire
 
 import kotlinx.android.synthetic.main.activity_event_detail.*
 import kotlinx.android.synthetic.main.content_event_detail.*
+import java.util.*
 
 class EventDetail : AppCompatActivity() {
     var event = EventModelObject()
+    var date:Calendar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -19,7 +19,7 @@ import java.util.*
 class CreateEvent : AppCompatActivity() {
     var event = EventModelObject()
     var wasNewEvent = true
-    lateinit var managedClubs: ArrayList<String>
+    var managedClubs: ArrayList<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +37,7 @@ class CreateEvent : AppCompatActivity() {
                 repeat_field.isChecked = true
             }
             time_field.text =event.getTimeFormatted()
+            club_field.text = event.club
             this.event = event
             println("AAAAAAA on Create id is ${this.event.id}")
             wasNewEvent = false
@@ -65,15 +66,26 @@ class CreateEvent : AppCompatActivity() {
     }
 
     fun showClubPickerDialog(v: View){
+        if(managedClubs == null){
+            //Was going to say could not edit, but does not seem to be working
+//            println("ASDF in if ")
+//            val builder = AlertDialog.Builder(this)
+//            builder.setTitle("Sorry, can't update the club of an existing event")
+//            builder.setPositiveButton(android.R.string.ok) { _, _ ->
+//            }
+//            builder.create().show()
 
-        var builder= AlertDialog.Builder(this)
-        var managedClubsArr = managedClubs.toTypedArray() as Array<CharSequence>
-        println("AAAAAAAA ${managedClubsArr.javaClass}")
-        builder.setTitle("Please select a club")
-        builder.setItems(managedClubsArr,{_, position ->
-            updateClubName(managedClubs[position])
-        })
-        builder.create().show()
+        }else {
+
+            val builder = AlertDialog.Builder(this)
+            val managedClubsArr = managedClubs!!.toTypedArray() as Array<CharSequence>
+            println("AAAAAAAA ${managedClubsArr.javaClass}")
+            builder.setTitle(getString(R.string.CreateEventClubDialogTittle))
+            builder.setItems(managedClubsArr, { _, position ->
+                updateClubName(managedClubs!![position])
+            })
+            builder.create().show()
+        }
     }
 
     fun updateClubName(name: String){

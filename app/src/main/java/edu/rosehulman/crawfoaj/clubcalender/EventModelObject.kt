@@ -137,6 +137,7 @@ data class EventModelObject (
 
     companion object CREATOR : Parcelable.Creator<EventModelObject> {
         val KEY = "GetEvent"
+        val CALENDER_KEY = "calender_key"
 
         override fun createFromParcel(parcel: Parcel): EventModelObject {
             val newEvent = EventModelObject(parcel)
