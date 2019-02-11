@@ -3,6 +3,7 @@ package edu.rosehulman.crawfoaj.clubcalender
 import android.graphics.Color
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.Log
 import com.alamkanak.weekview.WeekViewEvent
 import java.text.SimpleDateFormat
 import com.google.firebase.firestore.DocumentSnapshot
@@ -63,10 +64,15 @@ data class EventModelObject (
     }
 
     private fun toWeekEvent(start: Calendar?):WeekViewEvent {
+        start!!.set(Calendar.HOUR_OF_DAY,hour)
+        start!!.set(Calendar.MINUTE,min)
         val end = start!!.clone() as Calendar
         end.add(Calendar.HOUR_OF_DAY,1)
         val weekEvent = WeekViewEvent(key,name,location,start,end)
         weekEvent.color = Color.parseColor("#777777")
+        if (name == "Do&D2"){
+            Log.d("???","event start: $start,event end $end")
+        }
         return weekEvent
     }
 
@@ -77,20 +83,29 @@ data class EventModelObject (
                 occurrences.add(this.toWeekEvent())
             }
         }else{
+            if (name == "Do&D2"){
+                Log.d("weekEvent","event year: $year,event month $month")
+            }
             if (this.year > targetYear || (this.year == targetYear && this.month > targetMonth))
                 return emptyList()
             val calendar = Calendar.getInstance()
             calendar.set(year,month,day)
             val target = Calendar.getInstance()
             target.set(targetYear,targetMonth,0)
+            Log.d("weekEvent","calendar: ${calendar.time}, target: $targetYear - $targetMonth")
             while (calendar.before(target)){
                 calendar.add(Calendar.WEEK_OF_YEAR,1)
             }
+            Log.d("weekEvent","event date in parsing: ${calendar.time}")
             while (calendar.get(Calendar.MONTH) == targetMonth){
-                occurrences.add(toWeekEvent(calendar))
+                val cloned = calendar.clone() as Calendar
+                occurrences.add(toWeekEvent(cloned))
                 calendar.add(Calendar.WEEK_OF_YEAR,1)
+                Log.d("weekEvent","event date in increasing: ${calendar.time}")
             }
+            occurrences.map { Log.d("weekEvent","the actual events that are returned: ${it.startTime.time}") }
         }
+
         return occurrences
     }
 

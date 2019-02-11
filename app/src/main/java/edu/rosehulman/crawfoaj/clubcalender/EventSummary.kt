@@ -330,9 +330,11 @@ class EventSummary : AppCompatActivity() {
 //
             for(e in events){
                 if (curUser != null && e.club in curUser!!.interestedClubs) {
-                    weekEvents.addAll(e.getAllOccurrences(newMonth,newYear))
+                    weekEvents.addAll(e.getAllOccurrences(newMonth-1,newYear))
                 }
             }
+            weekEvents.map { Log.d("weekEvent","event name: ${it.name}, event date: ${it.startTime.time}"
+            + ", where it should be year $newYear month $newMonth") }
             return weekEvents
         }
 
