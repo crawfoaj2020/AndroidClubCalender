@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.TimePicker
+import android.widget.Toast
 
 import kotlinx.android.synthetic.main.activity_create_event.*
 import kotlinx.android.synthetic.main.content_create_event.*
@@ -109,11 +110,17 @@ class CreateEvent : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_save_event -> {
                 val intent = Intent(this,EventSummary::class.java)
+                if (name_field.text.toString().isBlank()){
+                    Toast.makeText(this,"event must have a name",Toast.LENGTH_SHORT).show()
+                    false
+                }
                 event.name = name_field.text.toString()
                 event.description = description_field.text.toString()
                 event.location = location_field.text.toString()
                 event.repeatsWeekly = repeat_field.isChecked
                 event.club = club_field.text.toString()
+                val duration = Integer.parseInt(duration_field.text.toString())
+                event.computeEndTime(duration)
                 intent.putExtra(KEY_NEW_EVENT,event)
                 true
             }

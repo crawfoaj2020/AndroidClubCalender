@@ -86,6 +86,7 @@ data class EventModelObject (
         if (!repeatsWeekly){
             if (this.month == targetMonth && this.year == targetYear){
                 occurrences.add(this.toWeekEvent())
+                occurrences.map { Log.d("weekEvent","the actual events that are returned: ${it.startTime.time}, ${it.endTime.time}") }
             }
         }else{
             if (name == "Do&D2"){
@@ -108,7 +109,7 @@ data class EventModelObject (
                 calendar.add(Calendar.WEEK_OF_YEAR,1)
                 Log.d("weekEvent","event date in increasing: ${calendar.time}")
             }
-            occurrences.map { Log.d("weekEvent","the actual events that are returned: ${it.startTime.time}") }
+            occurrences.map { Log.d("weekEvent","the actual events that are returned: ${it.startTime.time}, ${it.endTime.time}") }
         }
 
         return occurrences
@@ -143,6 +144,16 @@ data class EventModelObject (
             time.set(year, month, day, endHour, endMin)
         }
         return format.format(time.time)
+    }
+
+    fun computeEndTime(duration: Int) {
+        var time = Calendar.getInstance()
+        time.set(Calendar.HOUR_OF_DAY, hour)
+        time.set(Calendar.MINUTE, min)
+        time.set(year, month, day)
+        time.add(Calendar.MINUTE,duration)
+        endHour = time.get(Calendar.HOUR_OF_DAY)
+        endMin = time.get(Calendar.MINUTE)
     }
 
     companion object CREATOR : Parcelable.Creator<EventModelObject> {
