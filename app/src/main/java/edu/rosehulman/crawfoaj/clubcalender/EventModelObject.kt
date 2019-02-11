@@ -17,6 +17,8 @@ data class EventModelObject (
 
     var hour:Int = 0,
     var min:Int = 0,
+    var endHour: Int = 0,
+    var endMin: Int = 0,
     var year:Int = 2019,
     var month:Int = 1,
     var day:Int = 1,
@@ -38,6 +40,8 @@ data class EventModelObject (
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
+        parcel.readInt(),
+        parcel.readInt(),
         parcel.readByte() != 0.toByte()
     )
 
@@ -54,8 +58,8 @@ data class EventModelObject (
         startTime.set(year, month, day)
 
         var endTime = Calendar.getInstance()
-        endTime.set(Calendar.HOUR_OF_DAY, hour +1)
-        endTime.set(Calendar.MINUTE, min)
+        endTime.set(Calendar.HOUR_OF_DAY, endHour)
+        endTime.set(Calendar.MINUTE, endMin)
 
         endTime.set(year, month, day)
         var weekEvent = WeekViewEvent(key, name, location, startTime, endTime)
@@ -67,7 +71,8 @@ data class EventModelObject (
         start!!.set(Calendar.HOUR_OF_DAY,hour)
         start!!.set(Calendar.MINUTE,min)
         val end = start!!.clone() as Calendar
-        end.add(Calendar.HOUR_OF_DAY,1)
+        end.set(Calendar.HOUR_OF_DAY,endHour)
+        end.set(Calendar.MINUTE,endMin)
         val weekEvent = WeekViewEvent(key,name,location,start,end)
         weekEvent.color = Color.parseColor("#777777")
         if (name == "Do&D2"){
@@ -116,6 +121,8 @@ data class EventModelObject (
         parcel.writeString(club)
         parcel.writeInt(hour)
         parcel.writeInt(min)
+        parcel.writeInt(endHour)
+        parcel.writeInt(endMin)
         parcel.writeInt(year)
         parcel.writeInt(month)
         parcel.writeInt(day)
