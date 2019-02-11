@@ -6,6 +6,7 @@
     <string name="blank">Defualt value</string>
     <string name="location">Location</string>
     <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
     <string name="duration">Duration</string>
     <string name="duration_unspecified">0 min</string>
     <string name="date">Date</string>
