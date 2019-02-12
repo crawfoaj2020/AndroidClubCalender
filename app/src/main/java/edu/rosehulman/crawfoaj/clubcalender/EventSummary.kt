@@ -29,6 +29,7 @@ class EventSummary : AppCompatActivity() {
     private val allEventsRef = FirebaseFirestore
         .getInstance().collection(Constants.EVENTS_COLLECTION)
     private val userRef = FirebaseFirestore.getInstance().collection(Constants.USER_COLLECTION)
+    private var loggedIn = false
 
     val CREATE_EVENT_REQUEST_CODE = 1
     lateinit var mWeekView: WeekView
@@ -114,6 +115,7 @@ class EventSummary : AppCompatActivity() {
                 true
             }
             R.id.action_logout -> {
+                loggedIn = false
                 auth.signOut()
                 true
             }
@@ -154,9 +156,12 @@ class EventSummary : AppCompatActivity() {
 
 
             }else{
-                val signInIntent = Rosefire.getSignInIntent(this, REGISTRY_TOKEN)
-                Log.d("Rose","Starting Login activity")
-                startActivityForResult(signInIntent, ROSEFIRE_LOGIN_REQUEST_CODE)
+                if (!loggedIn) {
+                    val signInIntent = Rosefire.getSignInIntent(this, REGISTRY_TOKEN)
+                    Log.d("Rose","Starting Login activity")
+                    loggedIn = true
+                    startActivityForResult(signInIntent, ROSEFIRE_LOGIN_REQUEST_CODE)
+                }
             }
         }
     }
@@ -288,9 +293,11 @@ class EventSummary : AppCompatActivity() {
                                 this@EventSummary, "Authentication failed.",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            loggedIn = false
                         }else{
                             Log.d("Rose","Calling authListener")
                             Log.d("Rose","User id = ${auth.uid}")
+                            loggedIn = true
                             authListener.onAuthStateChanged(auth)
 
                         }
