@@ -312,23 +312,26 @@ class EventSummary : AppCompatActivity() {
 
         override fun onEventLongPress(weekEvent: WeekViewEvent?, eventRect: RectF?) {
             println("AAAAAAAA long press")
-            if(weekEvent == null){
+            if (weekEvent == null) {
                 return
             }
 
-            val builder = AlertDialog.Builder(this@EventSummary)
-            builder.setTitle("Are you sure you would like to delete this event?")
-            builder.setPositiveButton(android.R.string.ok) { _, _ ->
-                var id = weekEvent.id
-                for(event in events){
-                    if(event.key == id){
+            var id = weekEvent.id
+            for (event in events) {
+                if (event.key == id && event.club in curUser!!.managedClubs) {
+                    val builder = AlertDialog.Builder(this@EventSummary)
+                    builder.setTitle("Are you sure you would like to delete this event?")
+                    builder.setPositiveButton(android.R.string.ok) { _, _ ->
                         allEventsRef.document(event.id).delete()
-                        break
+
                     }
+                    builder.setNeutralButton(android.R.string.cancel, null)
+                    builder.create().show()
+                    return
+
                 }
             }
-            builder.setNeutralButton(android.R.string.cancel, null)
-            builder.create().show()
+
 
         }
 
@@ -358,6 +361,7 @@ class EventSummary : AppCompatActivity() {
                     intent.putExtra(EventModelObject.DAY, weekEvent.startTime.get(Calendar.DAY_OF_MONTH))
                     intent.putExtra(EventModelObject.MONTH, weekEvent.startTime.get(Calendar.MONTH))
                     intent.putExtra(EventModelObject.YEAR, weekEvent.startTime.get(Calendar.YEAR))
+                    intent.putExtra(User.KEY, curUser!!.managedClubs)
 //                    intent.putInt(EventModelObject.CALENDER_KEY, weekEvent)
                     break
                 }

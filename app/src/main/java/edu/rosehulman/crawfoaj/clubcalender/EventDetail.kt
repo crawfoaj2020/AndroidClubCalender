@@ -21,6 +21,7 @@ class EventDetail : AppCompatActivity() {
     var day:Int? =null
     var month:Int?=null
     var year:Int?=null
+    var managedClubs: ArrayList<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +31,11 @@ class EventDetail : AppCompatActivity() {
         day = intent.getIntExtra(EventModelObject.DAY, 0)
         month = intent.getIntExtra(EventModelObject.MONTH, 0)
         year = intent.getIntExtra(EventModelObject.YEAR, 0)
+
+        if(intent.getStringArrayListExtra(User.KEY) != null){
+            managedClubs = intent.getStringArrayListExtra(User.KEY)
+            println("AAAAAAA got list $managedClubs")
+        }
         setValues()
     }
 
@@ -55,6 +61,9 @@ class EventDetail : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_edit_event, menu)
+        if(event.club !in managedClubs!!){
+            menu.findItem(R.id.action_edit_event).isVisible = false
+        }
         return true
     }
 

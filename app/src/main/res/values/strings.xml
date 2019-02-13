@@ -25,6 +25,7 @@
     <string name="dialog_title_update_club_list">Please select clubs you would like to see events for:</string>
     <string name="CreateEventClubDialogTittle">Please select a club</string>
     <string name="Dateformat">%d/%d/%d</string>
+    <string name="toast_name">event must have a name</string>
     <string-array name="all_clubs">
         <item>Board Game Club</item>
         <item>Volleyball Club</item>

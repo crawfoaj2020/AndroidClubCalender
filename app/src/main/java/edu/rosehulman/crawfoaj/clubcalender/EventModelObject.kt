@@ -8,6 +8,7 @@ import com.alamkanak.weekview.WeekViewEvent
 import java.text.SimpleDateFormat
 import com.google.firebase.firestore.DocumentSnapshot
 import java.util.*
+import kotlin.collections.HashMap
 
 data class EventModelObject (
     var name:String = "",
@@ -63,7 +64,8 @@ data class EventModelObject (
 
         endTime.set(year, month, day)
         var weekEvent = WeekViewEvent(key, name, location, startTime, endTime)
-        weekEvent.color = Color.parseColor("#AAAAAA")
+//        weekEvent.color =
+        weekEvent.color = Color.parseColor(EventModelObject.colorMap[club])
         return weekEvent
     }
 
@@ -74,10 +76,8 @@ data class EventModelObject (
         end.set(Calendar.HOUR_OF_DAY,endHour)
         end.set(Calendar.MINUTE,endMin)
         val weekEvent = WeekViewEvent(key,name,location,start,end)
-        weekEvent.color = Color.parseColor("#777777")
-        if (name == "Do&D2"){
-            Log.d("???","event start: $start,event end $end")
-        }
+        weekEvent.color = Color.parseColor(EventModelObject.colorMap[club])
+//        weekEvent.color = Color.parseColor("#777777")
         return weekEvent
     }
 
@@ -154,6 +154,12 @@ data class EventModelObject (
         time.add(Calendar.MINUTE,duration)
         endHour = time.get(Calendar.HOUR_OF_DAY)
         endMin = time.get(Calendar.MINUTE)
+        println("TTTTTTTTTT $endHour")
+    }
+
+    fun getDuration(): Int {
+        return (endHour-hour)*60 + endMin - min
+
     }
 
     companion object CREATOR : Parcelable.Creator<EventModelObject> {
@@ -161,6 +167,14 @@ data class EventModelObject (
         val DAY = "calender_day"
         val MONTH = "calender_month"
         val YEAR = "calender_year"
+        val colorMap = mapOf<String, String>(
+            "Board Game Club" to "#AAAAAA",
+            "Volleyball Club" to "#C979d3",
+            "Anime Club" to "#C3dcea",
+            "MakerLab" to "#FEF7b8",
+            "D&D" to "#FBB49b"
+
+            )
 
         override fun createFromParcel(parcel: Parcel): EventModelObject {
             val newEvent = EventModelObject(parcel)

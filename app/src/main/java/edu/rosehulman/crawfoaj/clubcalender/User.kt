@@ -9,7 +9,7 @@ data class User(var username: String = "", var interestedClubs: ArrayList<String
     var id = ""
 
     companion object {
-        val KEY = "GetEvent"
+        val KEY = "GetUsers"
 
         fun fromSnapshot(snapshot: DocumentSnapshot): User{
             val user = snapshot.toObject(User::class.java)!!

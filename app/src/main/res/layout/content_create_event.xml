@@ -100,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_unspecified"
-                android:text="@string/duration_unspecified"
+                android:hint="@string/duration_unspecified"
                 android:textSize="@dimen/default_font_size"
                 android:inputType="number"
                 android:id="@+id/duration_field"

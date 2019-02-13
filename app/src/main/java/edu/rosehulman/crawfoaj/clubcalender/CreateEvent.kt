@@ -2,8 +2,10 @@ package edu.rosehulman.crawfoaj.clubcalender
 
 import android.app.*
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem
@@ -12,6 +14,7 @@ import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
+import com.google.common.io.Resources.getResource
 
 import kotlinx.android.synthetic.main.activity_create_event.*
 import kotlinx.android.synthetic.main.content_create_event.*
@@ -39,6 +42,7 @@ class CreateEvent : AppCompatActivity() {
             }
             time_field.text =event.getTimeFormatted(false)
             club_field.text = event.club
+            duration_field.setText(event.getDuration().toString())
             this.event = event
             println("AAAAAAA on Create id is ${this.event.id}")
             wasNewEvent = false
@@ -95,11 +99,48 @@ class CreateEvent : AppCompatActivity() {
 
     fun saveEvent(v:View){
         val intent = Intent()
+        val toast = Toast.makeText(this, "", Toast.LENGTH_SHORT)
+        val v = toast.view.findViewById(android.R.id.message) as TextView
+        v.setTextColor(Color.WHITE)
+//        toast.view.setBackgroundColor(R.color.colorAccent)
+//        toast.view.setBackgroundColor(getResources.getColor(R.color.colorAccent))
+        toast.view.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
+//        toast.view.setBackground(Color.BLACK)
+
+        if (name_field.text.toString().isBlank()){
+            toast.setText(getString(R.string.toast_name))
+            toast.show()
+            return
+        }
+        if (club_field.text.toString() == getString(R.string.club_unspecified)){
+            toast.setText("Please select a club")
+            toast.show()
+            return
+        }
+        if (duration_field.text.toString().isBlank() || Integer.parseInt(duration_field.text.toString()) <= 0){
+            toast.setText("Invalid duration")
+            toast.show()
+            return
+        }
+        if (time_field.text.toString() == getString(R.string.time_unspecified)){
+            toast.setText("Please select a time")
+            toast.show()
+            return
+        }
+        if (date_field.text.toString() == getString(R.string.date_unspecified)){
+            toast.setText("Please select a date")
+            toast.show()
+            return
+        }
+
         event.name = name_field.text.toString()
         event.description = description_field.text.toString()
         event.location = location_field.text.toString()
         event.repeatsWeekly = repeat_field.isChecked
         event.club = club_field.text.toString()
+        val duration = Integer.parseInt(duration_field.text.toString())
+        event.computeEndTime(duration)
+        println("TTTTT after computed end time")
         intent.putExtra(KEY_NEW_EVENT,event)
         intent.putExtra(KEY_WAS_NEW_EVENT, wasNewEvent)
         setResult(Activity.RESULT_OK,intent)
